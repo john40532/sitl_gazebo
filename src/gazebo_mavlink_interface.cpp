@@ -105,7 +105,7 @@ void GazeboMavlinkInterface::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf
               gztopic_[index] = "control_position_gztopic_" + std::to_string(index);
       #if GAZEBO_MAJOR_VERSION >= 7 && GAZEBO_MINOR_VERSION >= 4
             /// only gazebo 7.4 and above support Any
-            b[index] = node_handle_->Advertise<gazebo::msgs::Any>(
+            joint_control_pub_[index] = node_handle_->Advertise<gazebo::msgs::Any>(
                 gztopic_[index]);
       #else
             joint_control_pub_[index] = node_handle_->Advertise<gazebo::msgs::GzString>(
