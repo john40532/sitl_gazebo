@@ -187,7 +187,9 @@ void GazeboImuPlugin::addNoise(Eigen::Vector3d* linear_acceleration,
                                const double dt) {
   // CHECK(linear_acceleration);
   // CHECK(angular_velocity);
-  assert(dt > 0.0);
+  // assert(dt > 0.0);
+  if (dt <= 0.0)
+    return;
 
   // Gyrosocpe
   double tau_g = imu_parameters_.gyroscope_bias_correlation_time;

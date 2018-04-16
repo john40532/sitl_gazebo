@@ -170,7 +170,7 @@ private:
   void handle_message(mavlink_message_t *msg);
   void pollForMAVLinkMessages(double _dt, uint32_t _timeoutMs);
 
-  static const unsigned n_out_max = 16;
+  static const unsigned n_out_max = 8;
   double alt_home = 488.0;   // meters
 
   math::Vector3 ev_bias;

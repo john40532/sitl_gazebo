@@ -105,7 +105,7 @@ void GazeboMavlinkInterface::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf
               gztopic_[index] = "control_position_gztopic_" + std::to_string(index);
       #if GAZEBO_MAJOR_VERSION >= 7 && GAZEBO_MINOR_VERSION >= 4
             /// only gazebo 7.4 and above support Any
-            joint_control_pub_[index] = node_handle_->Advertise<gazebo::msgs::Any>(
+            b[index] = node_handle_->Advertise<gazebo::msgs::Any>(
                 gztopic_[index]);
       #else
             joint_control_pub_[index] = node_handle_->Advertise<gazebo::msgs::GzString>(
@@ -475,6 +475,15 @@ void GazeboMavlinkInterface::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf
 void GazeboMavlinkInterface::OnUpdate(const common::UpdateInfo&  /*_info*/) {
   common::Time current_time = world_->GetSimTime();
   double dt = (current_time - last_time_).Double();
+  
+  // mavlink_heartbeat_t hb = {};
+  // mavlink_message_t message = {};
+  // hb.type = MAV_TYPE_QUADROTOR;
+  // hb.autopilot = MAV_AUTOPILOT_INVALID;
+  // hb.base_mode = MAV_MODE_FLAG_SAFETY_ARMED;
+  // hb.system_status = MAV_STATE_ACTIVE;
+  // mavlink_msg_heartbeat_encode(1, 1, &message, &hb);
+  // send_mavlink_message(&message);
 
   pollForMAVLinkMessages(dt, 1000);
 
@@ -885,14 +894,14 @@ void GazeboMavlinkInterface::pollForMAVLinkMessages(double _dt, uint32_t _timeou
 void GazeboMavlinkInterface::handle_message(mavlink_message_t *msg)
 {
   switch (msg->msgid) {
-  case MAVLINK_MSG_ID_HIL_ACTUATOR_CONTROLS:
-    mavlink_hil_actuator_controls_t controls;
-    mavlink_msg_hil_actuator_controls_decode(msg, &controls);
-    bool armed = false;
+  case MAVLINK_MSG_ID_RC_CHANNELS_OVERRIDE:
+    mavlink_rc_channels_override_t controls;
+    mavlink_msg_rc_channels_override_decode(msg, &controls);
+    bool armed = true; //false
 
-    if ((controls.mode & MAV_MODE_FLAG_SAFETY_ARMED) > 0) {
-      armed = true;
-    }
+    // if ((controls.mode & MAV_MODE_FLAG_SAFETY_ARMED) > 0) {
+    //   armed = true;
+    // }
 
     last_actuator_time_ = world_->GetSimTime();
 
@@ -900,11 +909,19 @@ void GazeboMavlinkInterface::handle_message(mavlink_message_t *msg)
       input_index_[i] = i;
     }
 
+    input_index_[0] = controls.chan1_raw;
+    input_index_[1] = controls.chan2_raw;
+    input_index_[2] = controls.chan3_raw;
+    input_index_[3] = controls.chan4_raw;
+    input_index_[4] = controls.chan5_raw;
+    input_index_[5] = controls.chan6_raw;
+    input_index_[6] = controls.chan7_raw;
+    input_index_[7] = controls.chan8_raw;
     // set rotor speeds, controller targets
     input_reference_.resize(n_out_max);
     for (int i = 0; i < input_reference_.size(); i++) {
       if (armed) {
-        input_reference_[i] = (controls.controls[input_index_[i]] + input_offset_[i])
+        input_reference_[i] = (input_index_[i] + input_offset_[i])
             * input_scaling_[i] + zero_position_armed_[i];
       } else {
         input_reference_[i] = zero_position_disarmed_[i];
