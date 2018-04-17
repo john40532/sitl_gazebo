@@ -941,10 +941,10 @@ void GazeboMavlinkInterface::handle_control(double _dt)
       double target = input_reference_[i];
       if (joint_control_type_[i] == "velocity")
       {
-        double current = joints_[i]->GetVelocity(0);
-        double err = current - target;
-        double force = pids_[i].Update(err, _dt);
-        joints_[i]->SetForce(0, force);
+        // double current = joints_[i]->GetVelocity(0);
+        // double err = current - target;
+        // double force = pids_[i].Update(err, _dt);
+        // joints_[i]->SetForce(0, force);
       }
       else if (joint_control_type_[i] == "position")
       {
