@@ -1,0 +1,7 @@
+syntax = "proto2";
+package mav_msgs.msgs;
+
+message CommandNozzleSpeed
+{
+  repeated float   nozzle_speed  = 1 [packed=true];
+}
