@@ -850,7 +850,7 @@
         <channel name='nozzle1'>
           <input_index>4</input_index>
           <input_offset>0</input_offset>
-          <input_scaling>0.001</input_scaling>
+          <input_scaling>1</input_scaling>
           <zero_position_disarmed>0</zero_position_disarmed>
           <zero_position_armed>0</zero_position_armed>
           <joint_control_type>velocity</joint_control_type>
@@ -859,7 +859,7 @@
         <channel name='nozzle2'>
           <input_index>5</input_index>
           <input_offset>0</input_offset>
-          <input_scaling>0.001</input_scaling>
+          <input_scaling>1</input_scaling>
           <zero_position_disarmed>0</zero_position_disarmed>
           <zero_position_armed>0</zero_position_armed>
           <joint_control_type>velocity</joint_control_type>
@@ -868,7 +868,7 @@
         <channel name='nozzle3'>
           <input_index>6</input_index>
           <input_offset>0</input_offset>
-          <input_scaling>0.001</input_scaling>
+          <input_scaling>1</input_scaling>
           <zero_position_disarmed>0</zero_position_disarmed>
           <zero_position_armed>0</zero_position_armed>
           <joint_control_type>velocity</joint_control_type>
@@ -877,7 +877,7 @@
         <channel name='nozzle4'>
           <input_index>7</input_index>
           <input_offset>0</input_offset>
-          <input_scaling>0.001</input_scaling>
+          <input_scaling>1</input_scaling>
           <zero_position_disarmed>0</zero_position_disarmed>
           <zero_position_armed>0</zero_position_armed>
           <joint_control_type>velocity</joint_control_type>
